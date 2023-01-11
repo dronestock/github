@@ -56,14 +56,11 @@ func (p *plugin) call(ctx context.Context, uri string, req any, rsp any, method 
 	}
 	p.Debug("调用Github接口", fields...)
 
-	http := p.Http()
-	http.SetHeader("Accept", "application/vnd.github+json")
-	http.SetHeader("Authorization", fmt.Sprintf("Bearer %s", p.Token))
-	http.SetHeader("X-GitHub-Api-Version", p.Version)
-	http.SetContext(ctx).SetBody(req).SetResult(rsp)
+	http := p.http(ctx)
+	http.SetBody(req).SetResult(rsp)
 
 	response := new(resty.Response)
-	url := fmt.Sprintf("https://api.github.com/%s", uri)
+	url := p.url(uri)
 	switch method {
 	case gox.HttpMethodGet:
 		response, err = http.Get(url)
@@ -74,7 +71,39 @@ func (p *plugin) call(ctx context.Context, uri string, req any, rsp any, method 
 		p.Warn("调用Github出错", fields.Connect(field.Error(err))...)
 	} else if response.IsError() {
 		err = exc.NewException(response.StatusCode(), "调用Github返回错误", fields...)
+		p.Warn("Github返回错误", fields.Connect(field.Error(err))...)
 	}
 
 	return
+}
+
+func (p *plugin) sendfile(ctx context.Context, uri string, filepath string) (err error) {
+	fields := gox.Fields[any]{
+		field.New("uri", uri),
+		field.New("filepath", filepath),
+	}
+	http := p.http(ctx)
+	if hr, he := http.SetFile("file", filepath).Post(p.url(uri)); nil != he {
+		err = he
+		p.Warn("向Github上传文件出错", fields.Connect(field.Error(err))...)
+	} else if hr.IsError() {
+		err = exc.NewException(hr.StatusCode(), "Github返回错误", fields...)
+		p.Warn("Github返回错误", fields.Connect(field.Error(err))...)
+	}
+
+	return
+}
+
+func (p *plugin) http(ctx context.Context) (http *resty.Request) {
+	http = p.Http()
+	http.SetHeader("Accept", "application/vnd.github+json")
+	http.SetHeader("Authorization", fmt.Sprintf("Bearer %s", p.Token))
+	http.SetHeader("X-GitHub-Api-Version", p.Version)
+	http.SetContext(ctx)
+
+	return
+}
+
+func (p *plugin) url(uri string) string {
+	return fmt.Sprintf("https://api.github.com/%s", uri)
 }

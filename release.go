@@ -21,9 +21,9 @@ type release struct {
 	Latest string `json:"latest" validate:"oneof=true false legacy"`
 
 	// 附件
-	Asset string `json:"asset"`
+	Asset *asset `json:"asset"`
 	// 附件列表
-	Assets []string `json:"assets"`
+	Assets []*asset `json:"assets"`
 }
 
 func (p *plugin) release() (undo bool, err error) {
