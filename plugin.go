@@ -1,7 +1,12 @@
-package main
+package github
 
 import (
+	"context"
+	"fmt"
+
 	"github.com/dronestock/drone"
+	"github.com/go-resty/resty/v2"
+	"github.com/goexl/exc"
 	"github.com/goexl/gox"
 	"github.com/goexl/gox/field"
 )
@@ -9,9 +14,18 @@ import (
 type plugin struct {
 	drone.Base
 
-	// TODO 配置项，可以使用结构体
-	// 如何配置选项请参数：https://github.com/dronestock/drone
-	Todo string `default:"${TODO=默认值}" validate:"required"`
+	// 密钥
+	Token string `default:"${TOKEN}"`
+	// 拥有者
+	Owner string `default:"${OWNER}"`
+	// 仓库
+	Repo string `default:"${REPO}"`
+
+	// 发布
+	Release *release `default:"${RELEASE}"`
+
+	// 版本
+	Version string `default:"2022-11-28"`
 }
 
 func newPlugin() drone.Plugin {
@@ -22,16 +36,45 @@ func (p *plugin) Config() drone.Config {
 	return p
 }
 
-// Steps TODO 返回所有要执行步骤
 func (p *plugin) Steps() drone.Steps {
 	return drone.Steps{
-		drone.NewStep(p.todo, drone.Name(`启动守护进程`)),
+		drone.NewStep(p.release, drone.Name("发布")),
 	}
 }
 
-// Fields TODO 这儿返回所有的参数，上层在执行步骤时，会将参数在日志中打印
 func (p *plugin) Fields() gox.Fields[any] {
 	return gox.Fields[any]{
-		field.New("todo", p.Todo),
+		field.New("release", p.Release),
 	}
+}
+
+func (p *plugin) call(ctx context.Context, uri string, req any, rsp any, method gox.HttpMethod) (err error) {
+	fields := gox.Fields[any]{
+		field.New("uri", uri),
+		field.New("req", req),
+		field.New("rsp", rsp),
+	}
+	p.Debug("调用Github接口", fields...)
+
+	http := p.Http()
+	http.SetHeader("Accept", "application/vnd.github+json")
+	http.SetHeader("Authorization", fmt.Sprintf("Bearer %s", p.Token))
+	http.SetHeader("X-GitHub-Api-Version", p.Version)
+	http.SetContext(ctx).SetBody(req).SetResult(rsp)
+
+	response := new(resty.Response)
+	url := fmt.Sprintf("https://api.github.com/%s", uri)
+	switch method {
+	case gox.HttpMethodGet:
+		response, err = http.Get(url)
+	case gox.HttpMethodPost:
+		response, err = http.Post(url)
+	}
+	if nil != err {
+		p.Warn("调用Github出错", fields.Connect(field.Error(err))...)
+	} else if response.IsError() {
+		err = exc.NewException(response.StatusCode(), "调用Github返回错误", fields...)
+	}
+
+	return
 }
