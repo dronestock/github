@@ -103,9 +103,9 @@ func (p *plugin) sendfile(ctx context.Context, uri string, req any, filepath str
 		p.Warn("打开文件出错", fields.Connect(field.Error(oe))...)
 	} else {
 		http.SetBody(bytes)
-		http.SetHeader("Content-Type", mimetype.Detect(bytes).String())
-		http.SetHeader("Content-Type", "application/octet-stream")
-		p.Info("准备上传文件", fields.Connect(field.New("size", len(bytes)))...)
+		mime:=mimetype.Detect(bytes).String()
+		http.SetHeader("Content-Type", mime)
+		p.Info("准备上传文件", fields.Connects(field.New("size", len(bytes)), field.New("mime",mime))...)
 	}
 	if nil != err {
 		return
