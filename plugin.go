@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/dronestock/drone"
+	"github.com/gabriel-vasile/mimetype"
 	"github.com/go-resty/resty/v2"
 	"github.com/goexl/exc"
 	"github.com/goexl/gox"
@@ -102,7 +103,8 @@ func (p *plugin) sendfile(ctx context.Context, uri string, req any, filepath str
 		p.Warn("打开文件出错", fields.Connect(field.Error(oe))...)
 	} else {
 		http.SetBody(bytes)
-		p.Info("准备上传文件",fields.Connect(field.New("size", len(bytes)))...)
+		http.SetHeader("Content-Type", mimetype.Detect(bytes).String())
+		p.Info("准备上传文件", fields.Connect(field.New("size", len(bytes)))...)
 	}
 	if nil != err {
 		return

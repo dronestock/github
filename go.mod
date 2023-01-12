@@ -4,6 +4,7 @@ go 1.19
 
 require (
 	github.com/dronestock/drone v0.6.3
+	github.com/gabriel-vasile/mimetype v1.4.1
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/goexl/exc v0.0.5
 	github.com/goexl/gox v0.1.6
