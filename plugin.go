@@ -97,11 +97,12 @@ func (p *plugin) sendfile(ctx context.Context, uri string, req any, filepath str
 		return
 	}
 
-	if file, oe := os.ReadFile(filepath); nil != oe {
+	if bytes, oe := os.ReadFile(filepath); nil != oe {
 		err = oe
 		p.Warn("打开文件出错", fields.Connect(field.Error(oe))...)
 	} else {
-		http.SetBody(file)
+		http.SetBody(bytes)
+		p.Info("准备上传文件",fields.Connect(field.New("size", len(bytes)))...)
 	}
 	if nil != err {
 		return
