@@ -5,12 +5,11 @@ LABEL author="storezhang<华寅>" \
 email="storezhang@gmail.com" \
 qq="160290688" \
 wechat="storezhang" \
-# TODO 增加描述信息
-description="Drone持续集成Docker插件，增加以下功能：1、xxx；2、xxx"
+description="Drone持续集成Github插件，增加以下功能：1、发布"
 
 
 # 复制文件
-COPY plugin /bin
+COPY github /bin
 
 
 RUN set -ex \
@@ -23,7 +22,7 @@ RUN set -ex \
     \
     \
     # 增加执行权限
-    && chmod +x /bin/plugin \
+    && chmod +x /bin/github \
     \
     \
     \
@@ -31,4 +30,4 @@ RUN set -ex \
 
 
 # 执行命令
-ENTRYPOINT /bin/plugin
+ENTRYPOINT /bin/github
