@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"os"
 
 	"github.com/dronestock/drone"
 	"github.com/go-resty/resty/v2"
@@ -96,7 +97,17 @@ func (p *plugin) sendfile(ctx context.Context, uri string, req any, filepath str
 		return
 	}
 
-	if hr, he := http.SetFile("file", filepath).Post(p.uploadUrl(uri)); nil != he {
+	if file, oe := os.ReadFile(filepath); nil != oe {
+		err = oe
+		p.Warn("打开文件出错", fields.Connect(field.Error(oe))...)
+	} else {
+		http.SetBody(file)
+	}
+	if nil != err {
+		return
+	}
+
+	if hr, he := http.Post(p.uploadUrl(uri)); nil != he {
 		err = he
 		p.Warn("向Github上传文件出错", fields.Connect(field.Error(err))...)
 	} else if hr.IsError() {

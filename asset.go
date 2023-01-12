@@ -12,7 +12,7 @@ import (
 
 type asset struct {
 	File  string `json:"file"`
-	Name  string `json:"name"`
+	Name  string `json:"name" validate:"ascii"`
 	Label string `json:"label"`
 }
 
@@ -28,7 +28,7 @@ func (a *asset) upload(plugin *plugin, id int64) (err error) {
 	} else {
 		plugin.Info("准备上传文件", field.New("file", a.File), field.New("size", gox.Size(info.Size())))
 	}
-	if nil!=err{
+	if nil != err {
 		return
 	}
 
