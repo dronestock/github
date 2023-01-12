@@ -9,8 +9,8 @@ import (
 )
 
 type asset struct {
-	Filename string `json:"filename"`
-	Name     string `json:"name"`
+	File string `json:"file"`
+	Name string `json:"name"`
 	Label    string `json:"label"`
 }
 
@@ -22,7 +22,7 @@ func (a *asset) upload(plugin *plugin, id int64) (err error) {
 	if ce := structer.New().Map().From(a).To(req).Convert(); nil != ce {
 		err = ce
 		plugin.Warn("复制结构体出错", field.New("from", a), field.Error(ce))
-	} else if se := plugin.sendfile(ctx, uri, req, a.Filename); nil != se {
+	} else if se := plugin.sendfile(ctx, uri, req, a.File); nil != se {
 		err = se
 		plugin.Warn("上传附件出错", field.New("asset", a), field.Error(se))
 	}
