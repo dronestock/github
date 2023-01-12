@@ -104,6 +104,7 @@ func (p *plugin) sendfile(ctx context.Context, uri string, req any, filepath str
 	} else {
 		http.SetBody(bytes)
 		http.SetHeader("Content-Type", mimetype.Detect(bytes).String())
+		http.SetHeader("Content-Type", "application/octet-stream")
 		p.Info("准备上传文件", fields.Connect(field.New("size", len(bytes)))...)
 	}
 	if nil != err {
