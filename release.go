@@ -1,4 +1,4 @@
-package github
+package main
 
 type release struct {
 	// 标签
@@ -18,7 +18,7 @@ type release struct {
 	// 是否为本次发布自动生成名称和正文
 	Notes bool `json:"notes"`
 	// 指定是否应将此版本设置为存储库的最新版本
-	Latest string `json:"latest" validate:"oneof=true false legacy"`
+	Latest string `default:"true" json:"latest"`
 
 	// 附件
 	Asset *asset `json:"asset"`
@@ -30,6 +30,9 @@ func (p *plugin) release() (undo bool, err error) {
 	if undo = nil == p.Release; undo {
 		return
 	}
+
+	// 创建发布
+	err = p.Release.create(p)
 
 	return
 }

@@ -1,3 +1,3 @@
-package github
+package main
 
 const copyTag = "structer"

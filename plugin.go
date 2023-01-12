@@ -1,4 +1,4 @@
-package github
+package main
 
 import (
 	"context"
@@ -9,6 +9,7 @@ import (
 	"github.com/goexl/exc"
 	"github.com/goexl/gox"
 	"github.com/goexl/gox/field"
+	"github.com/goexl/structer"
 )
 
 type plugin struct {
@@ -60,7 +61,7 @@ func (p *plugin) call(ctx context.Context, uri string, req any, rsp any, method 
 	http.SetBody(req).SetResult(rsp)
 
 	response := new(resty.Response)
-	url := p.url(uri)
+	url := p.apiUrl(uri)
 	switch method {
 	case gox.HttpMethodGet:
 		response, err = http.Get(url)
@@ -77,18 +78,32 @@ func (p *plugin) call(ctx context.Context, uri string, req any, rsp any, method 
 	return
 }
 
-func (p *plugin) sendfile(ctx context.Context, uri string, filepath string) (err error) {
+func (p *plugin) sendfile(ctx context.Context, uri string, req any, filepath string) (err error) {
 	fields := gox.Fields[any]{
 		field.New("uri", uri),
 		field.New("filepath", filepath),
 	}
+
 	http := p.http(ctx)
-	if hr, he := http.SetFile("file", filepath).Post(p.url(uri)); nil != he {
+	queries := make(map[string]string)
+	if ce := structer.New().Map().From(req).To(&queries).Convert(); nil != ce {
+		err = ce
+		p.Warn("复制结构体出错", field.New("from", req), field.Error(ce))
+	} else {
+		http.SetQueryParams(queries)
+	}
+	if nil != err {
+		return
+	}
+
+	if hr, he := http.SetFile("file", filepath).Post(p.uploadUrl(uri)); nil != he {
 		err = he
 		p.Warn("向Github上传文件出错", fields.Connect(field.Error(err))...)
 	} else if hr.IsError() {
 		err = exc.NewException(hr.StatusCode(), "Github返回错误", fields...)
 		p.Warn("Github返回错误", fields.Connect(field.Error(err))...)
+	} else {
+		p.Debug("向Github上传文件成功", fields...)
 	}
 
 	return
@@ -104,6 +119,10 @@ func (p *plugin) http(ctx context.Context) (http *resty.Request) {
 	return
 }
 
-func (p *plugin) url(uri string) string {
+func (p *plugin) apiUrl(uri string) string {
 	return fmt.Sprintf("https://api.github.com/%s", uri)
+}
+
+func (p *plugin) uploadUrl(uri string) string {
+	return fmt.Sprintf("https://uploads.github.com/%s", uri)
 }

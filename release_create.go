@@ -1,4 +1,4 @@
-package github
+package main
 
 import (
 	"context"
@@ -26,10 +26,10 @@ func (r *release) create(plugin *plugin) (err error) {
 	}
 
 	// 上传附件
-	if "" != r.Asset {
+	if nil != r.Asset {
 		r.Assets = append(r.Assets, r.Asset)
 	}
-	err = r.uploads(plugin, r.Assets)
+	err = r.upload(plugin, rsp.Id, r.Assets)
 
 	return
 }
