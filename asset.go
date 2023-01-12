@@ -12,11 +12,15 @@ import (
 
 type asset struct {
 	File  string `json:"file"`
-	Name  string `json:"name" validate:"ascii"`
+	Name  string `json:"name" validate:"required,ascii"`
 	Label string `json:"label"`
 }
 
 func (a *asset) upload(plugin *plugin, id int64) (err error) {
+	if ""==a.Label{
+		a.Label=a.Name
+	}
+
 	// 创建附件
 	req := new(assetUploadReq)
 	ctx := context.Background()
