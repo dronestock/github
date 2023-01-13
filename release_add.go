@@ -9,10 +9,9 @@ import (
 	"github.com/goexl/structer"
 )
 
-func (r *release) create(plugin *plugin) (err error) {
-	// 创建发布
-	req := new(releaseReq)
-	rsp := new(releaseRsp)
+func (r *release) add(plugin *plugin) (err error) {
+	req := new(githubReleaseCreateReq)
+	rsp := new(githubRelease)
 	uri := fmt.Sprintf("repos/%s/%s/releases", plugin.Owner, plugin.Repo)
 	if ce := structer.New().Map().From(r).To(req).Tag(copyTag).Convert(); nil != ce {
 		err = ce

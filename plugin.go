@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"net/http"
 	"os"
 
 	"github.com/dronestock/drone"
@@ -59,21 +60,28 @@ func (p *plugin) call(ctx context.Context, uri string, req any, rsp any, method 
 	}
 	p.Debug("调用Github接口", fields...)
 
-	http := p.http(ctx)
-	http.SetBody(req).SetResult(rsp)
+	_req := p.http(ctx)
+	if nil != req {
+		_req.SetBody(req)
+	}
+	if nil != rsp {
+		_req.SetResult(rsp)
+	}
 
-	response := new(resty.Response)
+	hr := new(resty.Response)
 	url := p.apiUrl(uri)
 	switch method {
 	case gox.HttpMethodGet:
-		response, err = http.Get(url)
+		hr, err = _req.Get(url)
 	case gox.HttpMethodPost:
-		response, err = http.Post(url)
+		hr, err = _req.Post(url)
+	case gox.HttpMethodDelete:
+		hr, err = _req.Delete(url)
 	}
 	if nil != err {
 		p.Warn("调用Github出错", fields.Connect(field.Error(err))...)
-	} else if response.IsError() {
-		err = exc.NewException(response.StatusCode(), "调用Github返回错误", fields...)
+	} else if hr.IsError() && !(method == gox.HttpMethodGet && http.StatusNotFound == hr.StatusCode()) {
+		err = exc.NewException(hr.StatusCode(), "调用Github返回错误", fields...)
 		p.Warn("Github返回错误", fields.Connect(field.Error(err))...)
 	}
 
@@ -86,13 +94,13 @@ func (p *plugin) sendfile(ctx context.Context, uri string, req any, filepath str
 		field.New("filepath", filepath),
 	}
 
-	http := p.http(ctx)
+	_req := p.http(ctx)
 	queries := make(map[string]string)
 	if ce := structer.New().Map().From(req).To(&queries).Convert(); nil != ce {
 		err = ce
 		p.Warn("复制结构体出错", field.New("from", req), field.Error(ce))
 	} else {
-		http.SetQueryParams(queries)
+		_req.SetQueryParams(queries)
 	}
 	if nil != err {
 		return
@@ -102,16 +110,16 @@ func (p *plugin) sendfile(ctx context.Context, uri string, req any, filepath str
 		err = oe
 		p.Warn("打开文件出错", fields.Connect(field.Error(oe))...)
 	} else {
-		http.SetBody(bytes)
-		mime:=mimetype.Detect(bytes).String()
-		http.SetHeader("Content-Type", mime)
-		p.Info("准备上传文件", fields.Connects(field.New("size", len(bytes)), field.New("mime",mime))...)
+		_req.SetBody(bytes)
+		mime := mimetype.Detect(bytes).String()
+		_req.SetHeader("Content-Type", mime)
+		p.Info("准备上传文件", fields.Connects(field.New("size", len(bytes)), field.New("mime", mime))...)
 	}
 	if nil != err {
 		return
 	}
 
-	if hr, he := http.Post(p.uploadUrl(uri)); nil != he {
+	if hr, he := _req.Post(p.uploadUrl(uri)); nil != he {
 		err = he
 		p.Warn("向Github上传文件出错", fields.Connect(field.Error(err))...)
 	} else if hr.IsError() {

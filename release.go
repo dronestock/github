@@ -32,7 +32,7 @@ func (p *plugin) release() (undo bool, err error) {
 	}
 
 	// 创建发布
-	err = p.Release.create(p)
+	err = p.Release.publish(p)
 
 	return
 }
