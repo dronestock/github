@@ -9,7 +9,7 @@ import (
 )
 
 func (r *release) delete(plugin *plugin, id int64) (err error) {
-	if 0==id{
+	if 0 == id {
 		return
 	}
 
