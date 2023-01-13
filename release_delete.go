@@ -9,6 +9,10 @@ import (
 )
 
 func (r *release) delete(plugin *plugin, id int64) (err error) {
+	if 0==id{
+		return
+	}
+
 	uri := fmt.Sprintf("repos/%s/%s/releases/%d", plugin.Owner, plugin.Repo, id)
 	if he := plugin.call(context.Background(), uri, nil, nil, gox.HttpMethodDelete); nil != he {
 		err = he
