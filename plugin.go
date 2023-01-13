@@ -21,9 +21,9 @@ type plugin struct {
 	// 密钥
 	Token string `default:"${TOKEN}"`
 	// 拥有者
-	Owner string `default:"${OWNER}"`
+	Owner string `default:"${OWNER=${DRONE_REPO_OWNER}}"`
 	// 仓库
-	Repo string `default:"${REPO}"`
+	Repo string `default:"${REPO=${DRONE_REPO_NAME}}"`
 
 	// 发布
 	Release *release `default:"${RELEASE}"`
