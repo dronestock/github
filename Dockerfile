@@ -16,11 +16,6 @@ RUN set -ex \
     \
     \
     \
-    && apk update \
-    && apk --no-cache add docker \
-    \
-    \
-    \
     # 增加执行权限
     && chmod +x /bin/github \
     \
