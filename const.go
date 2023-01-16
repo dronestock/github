@@ -1,3 +1,3 @@
 package main
 
-const copyTag = "structer"
+const copyTag = "struct"

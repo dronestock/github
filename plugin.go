@@ -42,7 +42,7 @@ func (p *plugin) Config() drone.Config {
 
 func (p *plugin) Steps() drone.Steps {
 	return drone.Steps{
-		drone.NewStep(p.release, drone.Name("发布")),
+		drone.NewStep(newReleaseStep(p)).Name("发布").Build(),
 	}
 }
 
