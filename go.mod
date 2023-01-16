@@ -3,7 +3,7 @@ module github.com/dronestock/github
 go 1.19
 
 require (
-	github.com/dronestock/drone v0.6.4
+	github.com/dronestock/drone v0.6.7
 	github.com/gabriel-vasile/mimetype v1.4.1
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/goexl/exc v0.0.5
