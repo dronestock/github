@@ -18,7 +18,6 @@ steps:
         path: /var/lib/go
     settings:
       output:
-        name:
           name: github
 
   - name: 发布
