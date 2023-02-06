@@ -3,11 +3,11 @@ module github.com/dronestock/github
 go 1.19
 
 require (
-	github.com/dronestock/drone v0.8.0
+	github.com/dronestock/drone v0.8.2
 	github.com/gabriel-vasile/mimetype v1.4.1
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/goexl/exc v0.0.5
-	github.com/goexl/gox v0.1.7
+	github.com/goexl/gox v0.1.9
 	github.com/goexl/structer v0.0.1
 )
 
@@ -24,6 +24,7 @@ require (
 	github.com/goexl/xiren v0.0.5 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
+	github.com/maja42/goval v1.3.1 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/rs/xid v1.4.0 // indirect
 	github.com/sirupsen/logrus v1.9.0 // indirect
