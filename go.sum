@@ -4,8 +4,8 @@ github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/drone/envsubst v1.0.3 h1:PCIBwNDYjs50AsLZPYdfhSATKaRg/FJmDc2D6+C2x8g=
 github.com/drone/envsubst v1.0.3/go.mod h1:N2jZmlMufstn1KEqvbHjw40h1KyTmnVzHcSc9bFiJ2g=
-github.com/dronestock/drone v0.8.7 h1:MGpVp+QluYnU5ps8q+1xgFuaBBgJkPJsu3VbGEgcmHY=
-github.com/dronestock/drone v0.8.7/go.mod h1:30Y9twCFU0jC7zVhH5WyTZ6jyG5Pr3/lL80NqMWI3xQ=
+github.com/dronestock/drone v0.8.8 h1:ZxD/c15dyAzT7AlWFRdjn9UydPK/0ymSzePFIY41C8E=
+github.com/dronestock/drone v0.8.8/go.mod h1:30Y9twCFU0jC7zVhH5WyTZ6jyG5Pr3/lL80NqMWI3xQ=
 github.com/gabriel-vasile/mimetype v1.4.1 h1:TRWk7se+TOjCYgRth7+1/OYLNiRNIotknkFtf/dnN7Q=
 github.com/gabriel-vasile/mimetype v1.4.1/go.mod h1:05Vi0w3Y9c/lNvJOdmIwvrrAhX3rYhfQQCaf9VJcv7M=
 github.com/go-playground/assert/v2 v2.2.0 h1:JvknZsQTYeFEAhQwI4qEt9cyV5ONwRHC+lYKSsYSR8s=
