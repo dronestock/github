@@ -81,10 +81,10 @@ func (p *plugin) call(ctx context.Context, uri string, req any, rsp any, method 
 		hr, err = _req.Delete(url)
 	}
 	if nil != err {
-		p.Warn("调用Github出错", fields.Connect(field.Error(err))...)
+		p.Warn("调用Github出错", fields.Add(field.Error(err))...)
 	} else if hr.IsError() && !(method == gox.HttpMethodGet && http.StatusNotFound == hr.StatusCode()) {
 		err = exc.NewException(hr.StatusCode(), "调用Github返回错误", fields...)
-		p.Warn("Github返回错误", fields.Connect(field.Error(err))...)
+		p.Warn("Github返回错误", fields.Add(field.Error(err))...)
 	}
 
 	return
@@ -110,12 +110,12 @@ func (p *plugin) sendfile(ctx context.Context, uri string, req any, filepath str
 
 	if bytes, oe := os.ReadFile(filepath); nil != oe {
 		err = oe
-		p.Warn("打开文件出错", fields.Connect(field.Error(oe))...)
+		p.Warn("打开文件出错", fields.Add(field.Error(oe))...)
 	} else {
 		_req.SetBody(bytes)
 		mime := mimetype.Detect(bytes).String()
 		_req.SetHeader("Content-Type", mime)
-		p.Info("准备上传文件", fields.Connects(field.New("size", len(bytes)), field.New("mime", mime))...)
+		p.Info("准备上传文件", fields.Add(field.New("size", len(bytes)), field.New("mime", mime))...)
 	}
 	if nil != err {
 		return
@@ -123,10 +123,10 @@ func (p *plugin) sendfile(ctx context.Context, uri string, req any, filepath str
 
 	if hr, he := _req.Post(p.uploadUrl(uri)); nil != he {
 		err = he
-		p.Warn("向Github上传文件出错", fields.Connect(field.Error(err))...)
+		p.Warn("向Github上传文件出错", fields.Add(field.Error(err))...)
 	} else if hr.IsError() {
 		err = exc.NewException(hr.StatusCode(), "Github返回错误", fields...)
-		p.Warn("Github返回错误", fields.Connect(field.Error(err))...)
+		p.Warn("Github返回错误", fields.Add(field.Error(err))...)
 	} else {
 		p.Debug("向Github上传文件成功", fields...)
 	}
