@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"net/http"
 	"os"
 
 	"github.com/dronestock/drone"
@@ -12,6 +11,7 @@ import (
 	"github.com/goexl/exc"
 	"github.com/goexl/gox"
 	"github.com/goexl/gox/field"
+	"github.com/goexl/gox/http"
 	"github.com/goexl/structer"
 )
 
@@ -54,7 +54,7 @@ func (p *plugin) Fields() gox.Fields[any] {
 	}
 }
 
-func (p *plugin) call(ctx context.Context, uri string, req any, rsp any, method gox.HttpMethod) (err error) {
+func (p *plugin) call(ctx context.Context, uri string, req any, rsp any, method http.Method) (err error) {
 	fields := gox.Fields[any]{
 		field.New("uri", uri),
 		field.New("req", req),
@@ -73,16 +73,16 @@ func (p *plugin) call(ctx context.Context, uri string, req any, rsp any, method 
 	hr := new(resty.Response)
 	url := p.apiUrl(uri)
 	switch method {
-	case gox.HttpMethodGet:
+	case http.MethodGet:
 		hr, err = _req.Get(url)
-	case gox.HttpMethodPost:
+	case http.MethodPost:
 		hr, err = _req.Post(url)
-	case gox.HttpMethodDelete:
+	case http.MethodDelete:
 		hr, err = _req.Delete(url)
 	}
 	if nil != err {
 		p.Warn("调用Github出错", fields.Add(field.Error(err))...)
-	} else if hr.IsError() && !(method == gox.HttpMethodGet && http.StatusNotFound == hr.StatusCode()) {
+	} else if hr.IsError() && !(method == http.MethodGet && http.StatusNotFound == hr.StatusCode()) {
 		err = exc.NewException(hr.StatusCode(), "调用Github返回错误", fields...)
 		p.Warn("Github返回错误", fields.Add(field.Error(err))...)
 	}

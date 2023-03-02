@@ -15,8 +15,8 @@ type asset struct {
 }
 
 func (a *asset) upload(plugin *plugin, id int64) (err error) {
-	if ""==a.Label{
-		a.Label=a.Name
+	if "" == a.Label {
+		a.Label = a.Name
 	}
 
 	// 创建附件

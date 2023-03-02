@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/goexl/gox"
 	"github.com/goexl/gox/field"
+	"github.com/goexl/gox/http"
 	"github.com/goexl/structer"
 )
 
@@ -22,7 +22,7 @@ func (r *release) add(plugin *plugin) (err error) {
 	if ce := structer.New().Map().From(r).To(req).Tag(copyTag).Convert(); nil != ce {
 		err = ce
 		plugin.Warn("复制结构体出错", field.New("from", r), field.Error(ce))
-	} else if he := plugin.call(context.Background(), uri, req, rsp, gox.HttpMethodPost); nil != he {
+	} else if he := plugin.call(context.Background(), uri, req, rsp, http.MethodPost); nil != he {
 		err = he
 		plugin.Warn("创建发布出错", field.New("release", r), field.Error(he))
 	}
