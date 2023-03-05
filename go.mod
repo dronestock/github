@@ -7,11 +7,12 @@ require (
 	github.com/gabriel-vasile/mimetype v1.4.1
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/goexl/exc v0.0.5
-	github.com/goexl/gox v0.2.5
+	github.com/goexl/gox v0.2.6
 	github.com/goexl/structer v0.0.1
 )
 
 require (
+	github.com/antonmedv/expr v1.12.1 // indirect
 	github.com/drone/envsubst v1.0.3 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
@@ -24,7 +25,6 @@ require (
 	github.com/goexl/xiren v0.0.5 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/leodido/go-urn v1.2.2 // indirect
-	github.com/maja42/goval v1.3.1 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/rs/xid v1.4.0 // indirect
 	github.com/sirupsen/logrus v1.9.0 // indirect
@@ -36,3 +36,7 @@ require (
 	golang.org/x/sys v0.5.0 // indirect
 	golang.org/x/text v0.7.0 // indirect
 )
+
+replace github.com/dronestock/drone => ../drone
+
+replace github.com/goexl/gox => ../../goexl/gox
