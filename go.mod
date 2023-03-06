@@ -3,11 +3,11 @@ module github.com/dronestock/github
 go 1.19
 
 require (
-	github.com/dronestock/drone v0.8.8
+	github.com/dronestock/drone v0.8.9
 	github.com/gabriel-vasile/mimetype v1.4.1
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/goexl/exc v0.0.5
-	github.com/goexl/gox v0.2.6
+	github.com/goexl/gox v0.2.7
 	github.com/goexl/structer v0.0.1
 )
 
@@ -36,7 +36,3 @@ require (
 	golang.org/x/sys v0.5.0 // indirect
 	golang.org/x/text v0.7.0 // indirect
 )
-
-replace github.com/dronestock/drone => ../drone
-
-replace github.com/goexl/gox => ../../goexl/gox
