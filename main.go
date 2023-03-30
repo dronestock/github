@@ -5,5 +5,5 @@ import (
 )
 
 func main() {
-	panic(drone.New(newPlugin).Alias("REPO", "REPOSITORY").Boot())
+	drone.New(newPlugin).Alias("REPO", "REPOSITORY").Boot()
 }
