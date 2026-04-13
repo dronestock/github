@@ -1,11 +1,11 @@
 module github.com/dronestock/github
 
-go 1.23
+go 1.23.0
 
 require (
 	github.com/dronestock/drone v1.2.6
 	github.com/gabriel-vasile/mimetype v1.4.5
-	github.com/go-resty/resty/v2 v2.15.2
+	github.com/go-resty/resty/v2 v2.17.2
 	github.com/goexl/exc v0.0.5
 	github.com/goexl/gox v1.8.9
 	github.com/goexl/structer v0.0.3
@@ -31,8 +31,8 @@ require (
 	github.com/leodido/go-urn v1.4.0 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/rs/xid v1.6.0 // indirect
-	golang.org/x/crypto v0.27.0 // indirect
-	golang.org/x/net v0.29.0 // indirect
-	golang.org/x/sys v0.25.0 // indirect
-	golang.org/x/text v0.18.0 // indirect
+	golang.org/x/crypto v0.41.0 // indirect
+	golang.org/x/net v0.43.0 // indirect
+	golang.org/x/sys v0.35.0 // indirect
+	golang.org/x/text v0.28.0 // indirect
 )
