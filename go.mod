@@ -4,7 +4,7 @@ go 1.23.0
 
 require (
 	github.com/dronestock/drone v1.2.6
-	github.com/gabriel-vasile/mimetype v1.4.5
+	github.com/gabriel-vasile/mimetype v1.4.13
 	github.com/go-resty/resty/v2 v2.17.2
 	github.com/goexl/exc v0.0.5
 	github.com/goexl/gox v1.8.9
