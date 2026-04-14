@@ -1,6 +1,6 @@
 module github.com/dronestock/github
 
-go 1.23.0
+go 1.25
 
 require (
 	github.com/dronestock/drone v1.2.6
@@ -8,7 +8,7 @@ require (
 	github.com/go-resty/resty/v2 v2.17.2
 	github.com/goexl/exc v0.0.5
 	github.com/goexl/gox v1.9.2
-	github.com/goexl/structer v0.0.3
+	github.com/goexl/structer v0.2.0
 )
 
 require (
