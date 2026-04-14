@@ -7,7 +7,7 @@ require (
 	github.com/gabriel-vasile/mimetype v1.4.13
 	github.com/go-resty/resty/v2 v2.17.2
 	github.com/goexl/exc v0.0.5
-	github.com/goexl/gox v1.8.9
+	github.com/goexl/gox v1.9.2
 	github.com/goexl/structer v0.0.3
 )
 
